@@ -15,11 +15,11 @@ alias Microblog.Repo
 alias Microblog.Accounts.User
 repo.delete_all(User)
 
-Repo.insert!(%User{email: "admin@example.com", is_admin?: true})
-Repo.insert!(%User{email: "alshammarif@example.com", is_admin?: false})
+Repo.insert!(%User{username: "pigeon_boy", email: "mike@example.com"})
+Repo.insert!(%User{username: "ana-tony", email: "louis@example.com"})
 
 alias Microblog.Blog.Post
 repo.delete_all(Post)
 
-Repo.insert!(%Post{username: "pigeon_boy", postdate: 02/10/2017, title: "nothing to see here", 
-body: "There is absolutely nothing to see here" tags: "nothing"})
+Repo.insert!(%Post{username: "pigeon_boy", title: "nothing", body: "nothing to see here"})
+Repo.insert!(%Post{username: "ana-tony", title: "everything", body: "everything to see here"})

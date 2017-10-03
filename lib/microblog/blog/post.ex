@@ -16,6 +16,6 @@ defmodule Microblog.Blog.Post do
   def changeset(%Post{} = post, attrs) do
     post
     |> cast(attrs, [:username, :title, :body])
-    |> validate_required([:username, :title, :body])
+    |> validate_required([:username, :body])
   end
 end
