@@ -1,32 +1,32 @@
 <br />
 <br />
-<h2>Listing Posts</h2>
 
-<table class="table">
-  <thead>
-    <tr>
-      <th>Username</th>
-      <th>Title</th>
-      <th>Body</th>
 
-      <th></th>
-    </tr>
-  </thead>
-  <tbody>
-<%= for post <- @posts do %>
-    <tr>
-      <td><%= post.username %></td>
-      <td><%= post.title %></td>
-      <td><%= post.body %></td>
+<div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
+  <div class="col-md-3">
+     <span><%= link "New Post", to: post_path(@conn, :new), class: "btn btn-dark" %></span>
+  </div>
+  <br />
+  <div class="col-md-9">
+      <%= for post <- @posts do %>
+        <div class="row">
+        <br />
+        <div class="card border-secondary mb-3" style="margin: 0 auto; width: 40rem;">
+          <div class="card-header">
+            <div class="col-md-12" style="margin: 0;">Username
+            <span style="margin-left: 45%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
+            <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>  
+           </div>
+          </div>
+          <div class="card-body">
+            <h4 class="card-title">Title</h4>
+            <p class="card-text"><%= post.body %><div class="card-body">
+            <a href="#" class="card-link">#tag</a>
+          </div>
+      </div>
+    </div>   
+  <% end %>
+</div>
+</div>
 
-      <td class="text-right">
-        <span><%= link "Show", to: post_path(@conn, :show, post), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-default btn-xs" %></span>
-        <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>
-      </td>
-    </tr>
-<% end %>
-  </tbody>
-</table>
 
-<span><%= link "New Post", to: post_path(@conn, :new), class: "btn btn-dark" %></span>

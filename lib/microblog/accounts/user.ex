@@ -7,6 +7,8 @@ defmodule Microblog.Accounts.User do
   schema "users" do
     field :email, :string
     field :username, :string
+    has_many :posts, Microblog.Blog.Post
+    has_many :follows, Microblog.Follows.Follow
 
     timestamps()
   end

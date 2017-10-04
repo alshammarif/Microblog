@@ -9,7 +9,7 @@ defmodule MicroblogWeb.SessionController do
     if user do
       conn
       |> put_session(:user_id, user.id)
-      |> put_flash(:info, "Logged in as #{user.email}")
+      |> put_flash(:info, "Logged in as #{user.username}")
       |> redirect(to: MicroblogWeb.Router.Helpers.post_path(MicroblogWeb.Endpoint, :index))
     else
       conn

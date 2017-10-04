@@ -7,15 +7,17 @@ defmodule Microblog.Blog.Post do
   schema "posts" do
     field :body, :string
     field :title, :string
-    field :username, :string
+    belongs_to :user, Microblog.Accounts.User
 
     timestamps()
   end
+ 
 
   @doc false
   def changeset(%Post{} = post, attrs) do
     post
-    |> cast(attrs, [:username, :title, :body])
-    |> validate_required([:username, :body])
+    |> cast(attrs, [:title, :body])
+    |> validate_required([:body])
+    |> assoc_constraint(:user)
   end
 end
