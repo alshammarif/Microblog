@@ -5,7 +5,12 @@ defmodule MicroblogWeb.PostController do
   alias Microblog.Blog.Post
 
   def index(conn, _params) do
-    posts = Blog.list_posts()
+    posts = Blog.list_posts() |> Microblog.Repo.preload([:user])
+    render(conn, "index.html", posts: posts)
+  end
+
+  def index(conn, %{"user_id" => user_id}) do
+    posts = Blog.list_user_posts(user_id) |> Microblog.Repo.preload([:user])
     render(conn, "index.html", posts: posts)
   end
 
@@ -26,7 +31,7 @@ defmodule MicroblogWeb.PostController do
   end
 
   def show(conn, %{"id" => id}) do
-    post = Blog.get_post!(id)
+    post = Blog.get_post!(id) |> Repo.preload([:user])
     render(conn, "show.html", post: post)
   end
 

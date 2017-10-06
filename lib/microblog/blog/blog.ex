@@ -21,6 +21,10 @@ defmodule Microblog.Blog do
     Repo.all(Post)
   end
 
+  def list_user_posts(user_id) do
+    Repo.all(from p in Post, where: p.user_id == ^user_id)
+  end 
+
   @doc """
   Gets a single post.
 
@@ -53,6 +57,21 @@ defmodule Microblog.Blog do
     %Post{}
     |> Post.changeset(attrs)
     |> Repo.insert()
+  end
+
+  def get_or_create_post(nil) do 
+    Repo.insert!(%Post{})
+    |> Repo.preload(:user)
+  end
+
+  def get_or_create_post(post_id) do 
+    post = Repo.get(Post, post_id)
+    if post do 
+      post
+      |> Repo.preload(:user)
+    else
+      get_or_create_post(nil)
+    end
   end
 
   @doc """

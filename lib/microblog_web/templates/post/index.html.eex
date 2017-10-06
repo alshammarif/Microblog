@@ -1,7 +1,6 @@
 <br />
 <br />
 
-
 <div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
   <div class="col-md-3">
      <span><%= link "New Post", to: post_path(@conn, :new), class: "btn btn-dark" %></span>
@@ -13,20 +12,20 @@
         <br />
         <div class="card border-secondary mb-3" style="margin: 0 auto; width: 40rem;">
           <div class="card-header">
-            <div class="col-md-12" style="margin: 0;">Username
-            <span style="margin-left: 45%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
-            <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>  
+            <div class="col-md-12" style="margin: 0;"> <%= post.user.username %>
+              <span style="margin-left: 60%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
+              <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>  
+             </div>
            </div>
-          </div>
-          <div class="card-body">
-            <h4 class="card-title">Title</h4>
-            <p class="card-text"><%= post.body %><div class="card-body">
-            <a href="#" class="card-link">#tag</a>
-          </div>
-      </div>
-    </div>   
-  <% end %>
+           <div class="card-body">
+             <h4 class="card-title">Title</h4>
+             <p class="card-text"><%= post.body %><div class="card-body">
+             <a href="#" class="card-link">#tag</a>
+           </div>
+         </div>
+       </div>
+      </div>   
+    <% end %>
+  </div>
+ </div>
 </div>
-</div>
-
-

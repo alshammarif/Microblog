@@ -40,11 +40,11 @@
                    <input type="text" placeholder="email" 
                              class="form-control" name="email">
                    <input type="submit" value="Login" class="btn btn-dark">
+                   <span>
+                      <%= link "Sign Up", to: user_path(@conn, :new), class: "btn btn-dark" %>
+                   </span>
                 <% end %>
               <% end %>
-             <span>
-               <%= link "Sign Up", to: user_path(@conn, :new), class: "btn btn-dark" %>
-             </span>
         </nav>
       </header>
 
