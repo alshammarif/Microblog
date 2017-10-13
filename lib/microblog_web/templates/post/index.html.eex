@@ -1,6 +1,6 @@
 <br />
 <br />
-
+<%= if @current_user !== nil do %>
 <div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
   <div class="col-md-3">
      <span><%= link "New Post", to: post_path(@conn, :new), class: "btn btn-dark" %></span>
@@ -12,10 +12,20 @@
         <br />
         <div class="card border-secondary mb-3" style="margin: 0 auto; width: 40rem;">
           <div class="card-header">
-            <div class="col-md-12" style="margin: 0;"> <%= post.user.username %>
+            <%= if @current_user.id == post.user_id do %>
+	    <div class="col-md-12" style="margin: 0;"> <%= post.user.username %>
               <span style="margin-left: 60%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
               <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>  
              </div>
+	    <% else %>
+	      <div class= "col-md-12" style ="margin: 0;"> <%= post.user.username %>
+		<p id="post-likes" 
+			data-post_id="<%= post.id %>"
+			data-user_id="<%= @current_user.id %>">
+		   &nbsp;	
+		</p>
+		<button id="like-button" class= "btn btn-primary btn-xs">"Like"</button>
+	    <% end %>
            </div>
            <div class="card-body">
              <h4 class="card-title">Title</h4>
@@ -29,3 +39,4 @@
   </div>
  </div>
 </div>
+<% end %>
