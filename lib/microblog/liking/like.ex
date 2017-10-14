@@ -6,8 +6,8 @@ defmodule Microblog.Liking.Like do
 
   schema "likes" do
     field :total, :integer
-    belongs_to :post_id, :id
-    has_many :user_id, :id
+    belongs_to :post_id, Microblog.Blog.Post
+    has_many :user_id, Microblog.Accounts.User
 
     timestamps()
   end
@@ -15,7 +15,8 @@ defmodule Microblog.Liking.Like do
   @doc false
   def changeset(%Like{} = like, attrs) do
     like
-    |> cast(attrs, [:total])
-    |> validate_required([:total])
+    |> cast(attrs, [:post_id, :user_id])
+    |> validate_required([:post_id])
+    |> assoc_constraint([:post_id, :user_id])
   end
 end

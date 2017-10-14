@@ -9,7 +9,7 @@ defmodule Microblog.Accounts.User do
     field :username, :string
     has_many :posts, Microblog.Blog.Post
     has_many :follows, Microblog.Follows.Follow
-
+    has_many :likes, Microblog.Liking.Like
     timestamps()
   end
 

@@ -15,7 +15,7 @@ defmodule MicroblogWeb.LikeController do
   def index(conn, _params) do
     likes = Liking.list_likes()
     render(conn, "index.json", likes: likes)
-  end
+  end 
 
   def create(conn, %{"like" => like_params}) do
     with {:ok, %Like{} = like} <- Liking.create_like(like_params) do
@@ -24,7 +24,7 @@ defmodule MicroblogWeb.LikeController do
       |> put_resp_header("location", like_path(conn, :show, like))
       |> render("show.json", like: like)
     end
-  end
+  end 
 
   def show(conn, %{"id" => id}) do
     like = Liking.get_like!(id)

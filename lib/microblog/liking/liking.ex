@@ -19,15 +19,24 @@ defmodule Microblog.Liking do
   """
   def list_likes do
     Repo.all(Like)
-     |> Microblog.Repo.preload(:user)
+     |> Microblog.Repo.preload([:user, :post])
   end
 
   def list_post_likes(post_id) do
     Repo.all(from l in Like, where: l.post_id == ^post_id)
-     |> Microblog.Repo.preload(:user)
+     |> Microblog.Repo.preload([:user, :post])
   end
 
-
+  def total_likes(post_id) do
+    likes = Repo.all(from l in Like, where: l.post_id == ^post_id) 
+    Repo.aggregate(likes, :count, :post_id)
+     |> Microblog.Repo.preload([:user, :post])
+  end
+  
+  def check_user(user_id, post_id) do 
+     Repo.one(from l in Like, where: l.user_id == ^user_id, where: l.post_id == ^post_id)
+     |> Microblog.Repo.preload([:user, :post])
+  end    
 
   @doc """
   Gets a single like.
