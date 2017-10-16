@@ -18,20 +18,24 @@
                  <div class="collapse navbar-collapse" id="main-navbar">
                       <ul class="navbar-nav mr-auto">
                          <li class="nav-item">
-                            <a class="nav-link" href="#">Profile</a>
+                            <%= if @current_user do %>
+                              <%= link "Profile", to: user_path(@conn, :show, @current_user.id), class: "nav-link"%>
+                            <% end %> 
+			 </li>
+                         <li class="nav-item">
+                            <%= link "Posts", to: post_path(@conn, :index), class: "nav-link"%>
                          </li>
                          <li class="nav-item">
-                            <a class="nav-link" href="#">Posts</a>
-                         </li>
-                         <li class="nav-item">
-                            <a class="nav-link" href="#">Search</a>
+                            <%= if @current_user do %>
+                              <%= link "New Posts", to: post_path(@conn, :new), class: "btn btn-light btn-xs"%>
+                         <% end %>
                          </li>
                      </ul>
                </div>
 
               <%= if @current_user do %>
                 <span class="text-light">
-                  <%= @current_user.email %> |
+                  <%= @current_user.username %> |
                      <%= link("logout", to: session_path(@conn, :logout), method: :delete) %>
                 </span>
               <% else %>

@@ -18,7 +18,7 @@ import "phoenix_html"
 // Local files can be imported directly using relative
 // paths "./socket" or full ones "web/static/js/socket".
 
-// import socket from "./socket"
+ import socket from "./socket"
 
 var likes = 0;
 let bb = $($("#like-button")[0]);
@@ -29,6 +29,7 @@ let poid = pl.data('post_id');
 function addLikes(uuid, pid){ 
    likes += 1;
    bb.toggleClass('btn btn-danger btn-xs');
+   if(bb.value() == "liked") { bb.text("like"); }
    bb.text("liked");
    bb.next().text(likes);
 }

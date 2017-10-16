@@ -18382,14 +18382,13 @@ require.register("js/app.js", function(exports, require, module) {
 
 require("phoenix_html");
 
-// Import local files
-//
-// Local files can be imported directly using relative
-// paths "./socket" or full ones "web/static/js/socket".
+var _socket = require("./socket");
 
-// import socket from "./socket"
+var _socket2 = _interopRequireDefault(_socket);
 
-var likes = 0; // Brunch automatically concatenates all files in your
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+// Brunch automatically concatenates all files in your
 // watched paths. Those paths can be configured at
 // config.paths.watched in "brunch-config.js".
 //
@@ -18402,6 +18401,12 @@ var likes = 0; // Brunch automatically concatenates all files in your
 //
 // If you no longer want to use a dependency, remember
 // to also remove its path from "config.paths.watched".
+var likes = 0;
+
+// Import local files
+//
+// Local files can be imported directly using relative
+// paths "./socket" or full ones "web/static/js/socket".
 
 var bb = $($("#like-button")[0]);
 var pl = $($("#post-likes")[0]);
@@ -18411,11 +18416,86 @@ var poid = pl.data('post_id');
 function addLikes(uuid, pid) {
    likes += 1;
    bb.toggleClass('btn btn-danger btn-xs');
+   if (bb.value() == "liked") {
+      bb.text("like");
+   }
    bb.text("liked");
    bb.next().text(likes);
 }
 
 bb.click(addLikes);
+
+});
+
+require.register("js/post.js", function(exports, require, module) {
+"use strict";
+
+require("phoenix_html");
+
+var _socket = require("./socket");
+
+var _socket2 = _interopRequireDefault(_socket);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+//connect to socket
+_socket2.default.connect();
+
+//create channel 
+var channel = _socket2.default.channel("updates:all", {});
+
+var postsContainer = document.querySelector("#posts");
+
+var pullPost = function pullPost(_ref) {
+  var username = _ref.username,
+      title = _ref.title,
+      body = _ref.body;
+
+  var shell = document.createElement('div');
+  shell.className = "row";
+
+  var pContain = document.createElement('div');
+  pContain.className = "card border-secondary mb-3";
+
+  var pHeader = document.createElement('div');
+  pHeader.className = "card-header";
+
+  var innerH = document.createElement('div');
+  innerH.className = "col-md-12";
+  innerH.innerText = username;
+
+  pHeader.appendChild(innerH);
+  pHeader.appendChild('btns');
+
+  var poBody = document.createElement('div');
+  poBody.className = "card-body";
+
+  var h4Title = document.createElement('h4');
+  h4Title.className = "card-title";
+  h4Title.innerText = title;
+
+  var pBody = document.createElement('p');
+  pBody.className = "card-text";
+  pBody.innerText = body;
+
+  poBody.appendChild(h4Title);
+  poBody.appendChild(pBody);
+
+  pContain.appendChild(pHeader);
+  pContain.appendChild(poBody);
+
+  shell.appendChild(pContain);
+  return shell;
+};
+
+channel.on("new_msg", function (payload) {
+  console.log("added posts", payload);
+
+  if (postContainer) {
+    var newPost = pullPost(payload);
+    postsContainer.prepend(newPost);
+  }
+});
 
 });
 
@@ -18482,7 +18562,67 @@ var socket = new _phoenix.Socket("/socket", { params: { token: window.userToken 
 socket.connect();
 
 // Now that you are connected, you can join channels with a topic:
-var channel = socket.channel("topic:subtopic", {});
+//let channel = socket.channel("topic:subtopic", {})
+
+//connect to socket
+socket.connect();
+
+//create channel 
+var channel = socket.channel("updates:all", {});
+
+var postsContainer = document.querySelector("#posts");
+
+var pullPost = function pullPost(_ref) {
+  var username = _ref.username,
+      title = _ref.title,
+      body = _ref.body;
+
+  var shell = document.createElement('div');
+  shell.className = "row";
+
+  var pContain = document.createElement('div');
+  pContain.className = "card border-secondary mb-3";
+
+  var pHeader = document.createElement('div');
+  pHeader.className = "card-header";
+
+  var innerH = document.createElement('div');
+  innerH.className = "col-md-12";
+  innerH.innerText = username;
+
+  pHeader.appendChild(innerH);
+  pHeader.appendChild('btns');
+
+  var poBody = document.createElement('div');
+  poBody.className = "card-body";
+
+  var h4Title = document.createElement('h4');
+  h4Title.className = "card-title";
+  h4Title.innerText = title;
+
+  var pBody = document.createElement('p');
+  pBody.className = "card-text";
+  pBody.innerText = body;
+
+  poBody.appendChild(h4Title);
+  poBody.appendChild(pBody);
+
+  pContain.appendChild(pHeader);
+  pContain.appendChild(poBody);
+
+  shell.appendChild(pContain);
+  return shell;
+};
+
+channel.on("new_msg", function (payload) {
+  console.log("added posts", payload);
+
+  if (postsContainer) {
+    var newPost = pullPost(payload);
+    postsContainer.prepend(newPost);
+  }
+});
+
 channel.join().receive("ok", function (resp) {
   console.log("Joined successfully", resp);
 }).receive("error", function (resp) {
