@@ -80,7 +80,6 @@ postButton.click(updatePosts)
 
 //channel builds posts 
 let postsContainer = document.querySelector("#posts")
-
 const pullPost = ({username, title, body}) => {
 let shell = document.createElement('div')
 shell.className = "row"
@@ -111,9 +110,8 @@ pBody.innerText = body
 
 poBody.appendChild(h4Title)
 poBody.appendChild(pBody)
-
 pContain.appendChild(pHeader)
-pContain.appendChild(poBody)
+pContain.appendChild(poBody)i
 
 shell.appendChild(pContain)
 return shell;

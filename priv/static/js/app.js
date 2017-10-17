@@ -18432,73 +18432,6 @@ bb.click(addLikes);
 require.register("js/post.js", function(exports, require, module) {
 "use strict";
 
-require("phoenix_html");
-
-var _socket = require("./socket");
-
-var _socket2 = _interopRequireDefault(_socket);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
-//connect to socket
-_socket2.default.connect();
-
-//create channel 
-var channel = _socket2.default.channel("updates:all", {});
-
-var postsContainer = document.querySelector("#posts");
-
-var pullPost = function pullPost(_ref) {
-  var username = _ref.username,
-      title = _ref.title,
-      body = _ref.body;
-
-  var shell = document.createElement('div');
-  shell.className = "row";
-
-  var pContain = document.createElement('div');
-  pContain.className = "card border-secondary mb-3";
-
-  var pHeader = document.createElement('div');
-  pHeader.className = "card-header";
-
-  var innerH = document.createElement('div');
-  innerH.className = "col-md-12";
-  innerH.innerText = username;
-
-  pHeader.appendChild(innerH);
-  pHeader.appendChild('btns');
-
-  var poBody = document.createElement('div');
-  poBody.className = "card-body";
-
-  var h4Title = document.createElement('h4');
-  h4Title.className = "card-title";
-  h4Title.innerText = title;
-
-  var pBody = document.createElement('p');
-  pBody.className = "card-text";
-  pBody.innerText = body;
-
-  poBody.appendChild(h4Title);
-  poBody.appendChild(pBody);
-
-  pContain.appendChild(pHeader);
-  pContain.appendChild(poBody);
-
-  shell.appendChild(pContain);
-  return shell;
-};
-
-channel.on("new_msg", function (payload) {
-  console.log("added posts", payload);
-
-  if (postContainer) {
-    var newPost = pullPost(payload);
-    postsContainer.prepend(newPost);
-  }
-});
-
 });
 
 require.register("js/socket.js", function(exports, require, module) {
@@ -18569,6 +18502,25 @@ socket.connect();
 //create channel 
 var channel = socket.channel("updates:all", {});
 
+//channel pushes
+
+var postButton = document.querySelector("#postSubmit");
+var postUser = document.querySelector("#post-user");
+var postTitle = document.querySelector("#postTitle");
+var postBody = document.querySelector("#postBody");
+
+function updatePosts() {
+  console.log("posted!");
+
+  channel.push("new_msg", { username: postUser.value, title: postTitle.value, body: postBody.value });
+
+  postTitle.value = "";
+  postBody.value = "";
+}
+
+postButton.click(updatePosts);
+
+//channel builds posts 
 var postsContainer = document.querySelector("#posts");
 
 var pullPost = function pullPost(_ref) {
@@ -18621,21 +18573,6 @@ channel.on("new_msg", function (payload) {
     postsContainer.prepend(newPost);
   }
 });
-
-var postButton = document.querySelector("#postSubmit");
-var postUser = document.querySelector("#post-user");
-var postTitle = document.querySelector("#postTitle");
-var postBody = document.querySelector("#postBody");
-
-function updatePosts() {
-  console.log("posted!");
-
-  channel.push("new_msg", { username: postUser.value, title: postTitle.value, body: postBody.value });
-  postTitle.value = "";
-  postBody.value = "";
-}
-
-postButton.click(updatePosts);
 
 channel.join().receive("ok", function (resp) {
   console.log("Joined successfully", resp);
