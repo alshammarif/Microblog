@@ -60,71 +60,66 @@ socket.connect()
 let channel = socket.channel("updates:all",{});
 
 //channel pushes
+let nbody = $("#newBody");
+let ntitle = $("#newTitle");
+let puser = $("#post-user");
+let submit = S("#postSubmit");
 
-let postButton = document.querySelector("#postSubmit")
-let postUser = document.querySelector("#post-user")
-let postTitle = document.querySelector("#postTitle")
-let postBody = document.querySelector("#postBody")
+submit.on('click', function(){
+   channel.push("new_msg", {username: puser.val(), title: ntitle.val(), body: nbody.val()});
+   nbody.val('');
+   ntitle.val('');
+});
 
-function updatePosts() {
-console.log("posted!");
+//channel on(s)
+let postList = $("#posts");
+let buttons = $(".btns");
 
-channel.push("new_msg", {username: postUser.value, title: postTitle.value, body: postBody.value});
+const building = ({username, title, body}) => {
+   let prow = document.createElement("div");
+   prow.className("row");
 
-postTitle.value = ""
-postBody.value = ""
+   let pcard = document.createElement("div");
+   pcard.className("card border-secondary mb-3");
+   pcard.style.cssText = "margin: 0 auto; width: 40rem;";
 
-}
+   let pheader = document.createElement("div");
+   pheader.className("card-header");
 
-postButton.click(updatePosts)
+   let hcontainer = document.createElement("div");
+   hcontainer.className("col-md-12");
+   hcontainer.style.cssText = "margin: 0;";
+   hcontainer.appendChild(username);
+   hcontainer.appendChild(buttons);
+  
+   pheader.appendChild(hcontainer);
+ 
+   let pcbody = document.createElement("div");
+   pcbody.className("card-body")
+   
+   let pctitle = document.createElement("h4");
+   pctitle.className("card-title");
+   pctitle.appendChild(title);
+   
+   let ptcbody = document.createElement("p");
+   ptcbody.className("card-body");
+   ptcbody.appendChild(body);
+   
+   pcbody.appendChild(pctitle);
+   pcbody.appendChild(ptcbody);
+   
+   pcard.appendChild(pheader);
+   pcard.appendChild(pcbody);
 
-//channel builds posts 
-let postsContainer = document.querySelector("#posts")
-const pullPost = ({username, title, body}) => {
-let shell = document.createElement('div')
-shell.className = "row"
-
-let pContain = document.createElement('div')
-pContain.className = "card border-secondary mb-3"
-
-let pHeader = document.createElement('div')
-pHeader.className = "card-header"
-
-let innerH = document.createElement('div')
-innerH.className = "col-md-12"
-innerH.innerText = username
-
-pHeader.appendChild(innerH)
-pHeader.appendChild('btns')
-
-let poBody = document.createElement('div')
-poBody.className = "card-body"
-
-let h4Title = document.createElement('h4')
-h4Title.className = "card-title"
-h4Title.innerText = title
-
-let pBody = document.createElement('p')
-pBody.className = "card-text"
-pBody.innerText = body
-
-poBody.appendChild(h4Title)
-poBody.appendChild(pBody)
-pContain.appendChild(pHeader)
-pContain.appendChild(poBody)i
-
-shell.appendChild(pContain)
-return shell;
-}
+   prow.append(pcard);
+   return prow;
+};
 
 channel.on("new_msg", payload => {
-console.log("added posts", payload)
+  let builtPost = building(payload)
+  post.prepend(builtPost)
+});
 
-if(postsContainer) {
-let newPost = pullPost(payload)
-postsContainer.prepend(newPost)
-}
-})
 
 channel.join()
   .receive("ok", resp => { console.log("Joined successfully", resp) })

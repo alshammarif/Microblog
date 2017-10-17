@@ -18503,75 +18503,68 @@ socket.connect();
 var channel = socket.channel("updates:all", {});
 
 //channel pushes
+var nbody = $("#newBody");
+var ntitle = $("#newTitle");
+var puser = $("#post-user");
+var submit = S("#postSubmit");
 
-var postButton = document.querySelector("#postSubmit");
-var postUser = document.querySelector("#post-user");
-var postTitle = document.querySelector("#postTitle");
-var postBody = document.querySelector("#postBody");
+submit.on('click', function () {
+  channel.push("new_msg", { username: puser.val(), title: ntitle.val(), body: nbody.val() });
+  nbody.val('');
+  ntitle.val('');
+});
 
-function updatePosts() {
-  console.log("posted!");
+//channel on(s)
+var postList = $("#posts");
+var buttons = $(".btns");
 
-  channel.push("new_msg", { username: postUser.value, title: postTitle.value, body: postBody.value });
-
-  postTitle.value = "";
-  postBody.value = "";
-}
-
-postButton.click(updatePosts);
-
-//channel builds posts 
-var postsContainer = document.querySelector("#posts");
-
-var pullPost = function pullPost(_ref) {
+var building = function building(_ref) {
   var username = _ref.username,
       title = _ref.title,
       body = _ref.body;
 
-  var shell = document.createElement('div');
-  shell.className = "row";
+  var prow = document.createElement("div");
+  prow.className("row");
 
-  var pContain = document.createElement('div');
-  pContain.className = "card border-secondary mb-3";
+  var pcard = document.createElement("div");
+  pcard.className("card border-secondary mb-3");
+  pcard.style.cssText = "margin: 0 auto; width: 40rem;";
 
-  var pHeader = document.createElement('div');
-  pHeader.className = "card-header";
+  var pheader = document.createElement("div");
+  pheader.className("card-header");
 
-  var innerH = document.createElement('div');
-  innerH.className = "col-md-12";
-  innerH.innerText = username;
+  var hcontainer = document.createElement("div");
+  hcontainer.className("col-md-12");
+  hcontainer.style.cssText = "margin: 0;";
+  hcontainer.appendChild(username);
+  hcontainer.appendChild(buttons);
 
-  pHeader.appendChild(innerH);
-  pHeader.appendChild('btns');
+  pheader.appendChild(hcontainer);
 
-  var poBody = document.createElement('div');
-  poBody.className = "card-body";
+  var pcbody = document.createElement("div");
+  pcbody.className("card-body");
 
-  var h4Title = document.createElement('h4');
-  h4Title.className = "card-title";
-  h4Title.innerText = title;
+  var pctitle = document.createElement("h4");
+  pctitle.className("card-title");
+  pctitle.appendChild(title);
 
-  var pBody = document.createElement('p');
-  pBody.className = "card-text";
-  pBody.innerText = body;
+  var ptcbody = document.createElement("p");
+  ptcbody.className("card-body");
+  ptcbody.appendChild(body);
 
-  poBody.appendChild(h4Title);
-  poBody.appendChild(pBody);
+  pcbody.appendChild(pctitle);
+  pcbody.appendChild(ptcbody);
 
-  pContain.appendChild(pHeader);
-  pContain.appendChild(poBody);
+  pcard.appendChild(pheader);
+  pcard.appendChild(pcbody);
 
-  shell.appendChild(pContain);
-  return shell;
+  prow.append(pcard);
+  return prow;
 };
 
 channel.on("new_msg", function (payload) {
-  console.log("added posts", payload);
-
-  if (postsContainer) {
-    var newPost = pullPost(payload);
-    postsContainer.prepend(newPost);
-  }
+  var builtPost = building(payload);
+  post.prepend(builtPost);
 });
 
 channel.join().receive("ok", function (resp) {

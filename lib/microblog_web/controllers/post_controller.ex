@@ -23,8 +23,7 @@ defmodule MicroblogWeb.PostController do
 
   def create(conn, %{"post" => post_params}) do
     case Blog.create_post(post_params) do
-      {:ok, post} ->
-	MicroblogWeb.Endpoint.broadcast "updates:all", "new_msg", %{"title" => post.title, "body" => post.body}
+     {:ok, post} ->
         conn
         |> put_flash(:info, "Post created successfully.")
         |> redirect(to: post_path(conn, :index))
