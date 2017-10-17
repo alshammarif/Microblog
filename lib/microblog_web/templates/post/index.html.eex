@@ -16,6 +16,11 @@
 <div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
   <div class="col-md-12">
   <br />
+  <div class = "row">
+    <div id="np" class="col-md-9">
+	<%= render "form.html", Map.put(assigns, :action, post_path(@conn, :create)) %>
+    </div>
+  </div>
   <div id="posts" class="col-md-9">
       <%= for post <- @posts do %>
         <div class="row">
@@ -45,12 +50,11 @@
 	    <% end %>
            </div>
            <div class="card-body">
-             <h4 class="card-title">Title</h4>
-             <p class="card-text">
+             <h4 class="card-title"><%= post.title %></h4>
+             <p class="card-text"><%= post.body %></p>
            </div>
          </div>
-       </div>
-      </div>   
+       </div>  
     <% end %>
   </div>
  </div>

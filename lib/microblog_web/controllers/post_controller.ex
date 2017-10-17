@@ -5,13 +5,15 @@ defmodule MicroblogWeb.PostController do
   alias Microblog.Blog.Post
 
   def index(conn, _params) do
+    changeset = Blog.change_post(%Post{})
     posts = Blog.list_posts() |> Microblog.Repo.preload([:user])
-    render(conn, "index.html", posts: posts)
+    render(conn, "index.html", posts: posts, changeset: changeset)
   end
 
   def index(conn, %{"user_id" => user_id}) do
+    changeset = Blog.change_post(%Post{})
     posts = Blog.list_user_posts(user_id) |> Microblog.Repo.preload([:user])
-    render(conn, "index.html", posts: posts)
+    render(conn, "index.html", posts: posts, changeset: changeset)
   end
 
   def new(conn, _params) do
@@ -25,7 +27,7 @@ defmodule MicroblogWeb.PostController do
 	MicroblogWeb.Endpoint.broadcast "updates:all", "new_msg", %{"title" => post.title, "body" => post.body}
         conn
         |> put_flash(:info, "Post created successfully.")
-        |> redirect(to: post_path(conn, :show, post))
+        |> redirect(to: post_path(conn, :index))
       {:error, %Ecto.Changeset{} = changeset} ->
         render(conn, "new.html", changeset: changeset)
     end

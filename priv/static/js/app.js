@@ -18414,9 +18414,11 @@ var uid = pl.data('user_id');
 var poid = pl.data('post_id');
 
 function addLikes(uuid, pid) {
-   likes += 1;
    bb.toggleClass('btn btn-danger btn-xs');
-   if (bb.value() == "liked") {
+   if (bb.firstChild.data == "like") {
+      likes += 1;
+   }
+   if (bb.firstChild.data == "liked") {
       bb.text("like");
    }
    bb.text("liked");
@@ -18564,9 +18566,6 @@ socket.connect();
 // Now that you are connected, you can join channels with a topic:
 //let channel = socket.channel("topic:subtopic", {})
 
-//connect to socket
-socket.connect();
-
 //create channel 
 var channel = socket.channel("updates:all", {});
 
@@ -18622,6 +18621,21 @@ channel.on("new_msg", function (payload) {
     postsContainer.prepend(newPost);
   }
 });
+
+var postButton = document.querySelector("#postSubmit");
+var postUser = document.querySelector("#post-user");
+var postTitle = document.querySelector("#postTitle");
+var postBody = document.querySelector("#postBody");
+
+function updatePosts() {
+  console.log("posted!");
+
+  channel.push("new_msg", { username: postUser.value, title: postTitle.value, body: postBody.value });
+  postTitle.value = "";
+  postBody.value = "";
+}
+
+postButton.click(updatePosts);
 
 channel.join().receive("ok", function (resp) {
   console.log("Joined successfully", resp);

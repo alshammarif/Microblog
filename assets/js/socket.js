@@ -56,12 +56,29 @@ socket.connect()
 // Now that you are connected, you can join channels with a topic:
 //let channel = socket.channel("topic:subtopic", {})
 
-//connect to socket
-socket.connect();
-
 //create channel 
 let channel = socket.channel("updates:all",{});
 
+//channel pushes
+
+let postButton = document.querySelector("#postSubmit")
+let postUser = document.querySelector("#post-user")
+let postTitle = document.querySelector("#postTitle")
+let postBody = document.querySelector("#postBody")
+
+function updatePosts() {
+console.log("posted!");
+
+channel.push("new_msg", {username: postUser.value, title: postTitle.value, body: postBody.value});
+
+postTitle.value = ""
+postBody.value = ""
+
+}
+
+postButton.click(updatePosts)
+
+//channel builds posts 
 let postsContainer = document.querySelector("#posts")
 
 const pullPost = ({username, title, body}) => {

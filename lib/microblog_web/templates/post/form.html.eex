@@ -5,22 +5,22 @@
     </div>
   <% end %>
  
- <p>Posting as: <%=  @current_user.email %></ip>
+ <p id="post-user"><%=  @current_user.email %></ip>
 
     <%= hidden_input f, :user_id, value: @current_user.id %>
   <div class="form-group">
     <%= label f, :title, class: "control-label" %>
-    <%= text_input f, :title, class: "form-control" %>
+    <%= text_input f, :title, class: "form-control", id: "newTitle" %>
     <%= error_tag f, :title %>
   </div>
 
   <div class="form-group">
     <%= label f, :body, class: "control-label" %>
-    <%= textarea f, :body, class: "form-control" %>
+    <%= textarea f, :body, class: "form-control", id: "newBody" %>
     <%= error_tag f, :body %>
   </div>
 
   <div class="form-group">
-    <%= submit "Submit", class: "btn btn-primary" %>
+   <%= submit "Submit", class: "btn btn-primary", id: "postSubmit" %>
   </div>
 <% end %>

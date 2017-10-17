@@ -26,10 +26,12 @@ let pl = $($("#post-likes")[0]);
 let uid = pl.data('user_id');
 let poid = pl.data('post_id');
 
+
+
 function addLikes(uuid, pid){ 
-   likes += 1;
    bb.toggleClass('btn btn-danger btn-xs');
-   if(bb.value() == "liked") { bb.text("like"); }
+   if(bb.firstChild.data == "like") {likes += 1;}
+   if(bb.firstChild.data == "liked") { bb.text("like"); }
    bb.text("liked");
    bb.next().text(likes);
 }
