@@ -24,3 +24,6 @@ Ready to run in production? Please [check our deployment guides](http://www.phoe
 
   * https://microblog.aslhammarif.site
   * https://github.com/alshammarif/Microblog
+
+## Travis YML
+I took Nat Tuck's travis.yml code and adapted it to my own. All original credits go to him.
