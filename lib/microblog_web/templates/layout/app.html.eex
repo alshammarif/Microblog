@@ -25,6 +25,13 @@
                          <li class="nav-item">
                             <%= link "Posts", to: post_path(@conn, :index), class: "nav-link"%>
                          </li>
+			 <li class="nav-item">
+			    <%= if @current_user do %>
+			    <%= if @current_user.is_admin? do %>
+			      <%= link "Users", to: user_path(@conn, :index), class: "nav-link" %>
+			    <% end %>
+			    <% end %>
+			 </li>
                          <li class="nav-item">
                             <%= if @current_user do %>
                               <%= link "New Posts", to: post_path(@conn, :new), class: "btn btn-light btn-xs"%>
@@ -38,27 +45,51 @@
                   <%= @current_user.username %> |
                      <%= link("logout", to: session_path(@conn, :logout), method: :delete) %>
                 </span>
-              <% else %>
-                 <%= form_for @conn, session_path(@conn, :login), 
-                    [as: "user", class: "form-inline w-75"], fn f -> %>
-                   <input type="text" placeholder="email" 
-                             class="form-control" name="email">
-                   <input type="submit" value="Login" class="btn btn-dark">
-                   <span>
-                      <%= link "Sign Up", to: user_path(@conn, :new), class: "btn btn-dark" %>
-                   </span>
-                <% end %>
               <% end %>
         </nav>
       </header>
 
 	<div class="container">
+      <br />
       <%= if get_flash(@conn, :info) do %>
     	<p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
       <% end %>
       <%= if get_flash(@conn, :error) do %>
     	<p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
       <% end %>
+
+    <%= if @current_user == nil do %>
+    <div class="col-md-12">
+      <div class="row">
+        <div class="col-md-6" style= "margin: 0 auto;">
+          <img src="http://i149.photobucket.com/albums/s71/dylancolesss/Logomakr_1JQf3o_1.png" border="0" alt=" photo Logomakr_1JQf3o_1.png" style="width:100%; height:100%;"/>
+        </div>
+      </div>  
+    <br />
+    <br />
+    
+    <div class="row">
+          <%= form_for @conn, session_path(@conn, :login), 
+      [as: "user", class: "form-inline w-75"], fn f -> %>
+
+      <div class="form-group" style="margin-left: 30%; margin-right: 5%;">
+          <input type="text" placeholder="email" class="form-control" name="email">
+      </div>
+
+      <div class="form-group">
+        <input type="password" placeholder="password" class="form-control" name="password">
+      </div>
+
+      <div class="form-group" style="width: 40REM; margin-left: 30%; margin-top: 10%; ">
+        <input type="submit" value="Login" class="btn btn-dark"> 
+        <span style= "margin-left: 3%;">
+          <%= link "Sign Up", to: user_path(@conn, :new), class: "btn btn-warning" %>
+        </span>
+      </div>
+        <% end %>
+    </div>
+  </div>
+   <% end %>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

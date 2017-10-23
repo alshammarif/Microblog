@@ -62,13 +62,15 @@ let channel = socket.channel("updates:all",{});
 //channel pushes
 let nbody = $("#newBody");
 let ntitle = $("#newTitle");
-let puser = $("#post-user");
-let submit = S("#postSubmit");
+let puserinfo = $("#user-info");
+let puser = puserinfo.data("user_username");
+let submit = $("#post-submit");
 
 submit.on('click', function(){
-   channel.push("new_msg", {username: puser.val(), title: ntitle.val(), body: nbody.val()});
-   nbody.val('');
-   ntitle.val('');
+   console.log("this post should post!");
+   channel.push("new_msg", {username: puser.value, title: ntitle.value, body: nbody.value});
+   nbody.value = '';
+   ntitle.value = '';
 });
 
 //channel on(s)
@@ -117,7 +119,7 @@ const building = ({username, title, body}) => {
 
 channel.on("new_msg", payload => {
   let builtPost = building(payload)
-  post.prepend(builtPost)
+  postList.prepend(builtPost)
 });
 
 

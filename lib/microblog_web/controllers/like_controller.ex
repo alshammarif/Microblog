@@ -18,13 +18,20 @@ defmodule MicroblogWeb.LikeController do
   end 
 
   def create(conn, %{"like" => like_params}) do
-    with {:ok, %Like{} = like} <- Liking.create_like(like_params) do
+    with {:ok, %Like{} = like} <- Liking.create_like(like_params)
+    do
       conn
       |> put_status(:created)
       |> put_resp_header("location", like_path(conn, :show, like))
       |> render("show.json", like: like)
     end
   end 
+
+  def show(conn, %{"post_id" => post_id}) do
+     count = Liking.total_likes(post_id) 
+     render(conn, "show.json", count: count)
+  end
+
 
   def show(conn, %{"id" => id}) do
     like = Liking.get_like!(id)

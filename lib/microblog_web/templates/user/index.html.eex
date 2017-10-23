@@ -1,3 +1,8 @@
+<br />
+<br />
+<br />
+<%= if @current_user do %>
+<%= if @current_user.is_admin? do %>
 <h2>Listing Users</h2>
 
 <table class="table">
@@ -26,3 +31,5 @@
 </table>
 
 <span><%= link "New User", to: user_path(@conn, :new) %></span>
+<% end %>
+<% end %>

@@ -20,20 +20,74 @@ import "phoenix_html"
 
  import socket from "./socket"
 
-var likes = 0;
-let bb = $($("#like-button")[0]);
-let pl = $($("#post-likes")[0]);
-let uid = pl.data('user_id');
-let poid = pl.data('post_id');
+socket.connect()
 
+// Now that you are connected, you can join channels with a topic:
+//let channel = socket.channel("topic:subtopic", {})
 
+//create channel 
+let channel = socket.channel("updates:all",{});
 
-function addLikes(uuid, pid){ 
-   bb.toggleClass('btn btn-danger btn-xs');
-   if(bb.firstChild.data == "like") {likes += 1;}
-   if(bb.firstChild.data == "liked") { bb.text("like"); }
-   bb.text("liked");
-   bb.next().text(likes);
-}
+//channel pushes
+let nbody = $("#newBody");
+let ntitle = $("#newTitle");
+let puserinfo = $("#user-info");
+let puser = puserinfo.data("user_username");
+let submit = $("#post-submit");
 
-bb.click(addLikes);
+//likes 
+//code influenced by the original code done by Nat Tuck
+let handlebars = require("handlebars");
+
+$(function() {
+  if (!$("#likes-template").length > 0) {
+   //Wrong page.
+   return;
+  }
+
+  let lt = $($("#likes-template")[0]);
+  let code = lt.html();
+  let tmpl = handlebars.compile(code);
+
+  let pc = $($("#likes")[0]);
+  let path = pc.data("path");
+  let po_id = pc.data("post_id");
+  
+  let bb = $($("#like-button")[0]);
+  let u_id = bb.data("user_id");
+
+  function fetch_likes() {
+   function got_likes(data) {
+	console.log(data);
+	let html = tmpl(data);
+        pc.html(html);
+   }
+
+   $.ajax({
+	url: path,
+	data: {post_id: po_id},
+	contentType: "application/json",
+	dataType: "json",
+	method: "POST",
+	success: got_likes,
+
+   });
+  }
+
+  function add_like(){
+   let data = {like: {post_id: po_id, user_id: u_id}};
+
+   $.ajax({
+	url: path,
+	data: JSON.stringify(data),
+	contentType: "application/json",
+	dataType: "json",
+	method: "POST",
+	success: fetch_likes,
+   });
+  }
+
+  bb.click(add_like);
+
+  fetch_likes();
+});

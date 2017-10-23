@@ -18,14 +18,14 @@ defmodule MicroblogWeb.UpdatesChannel do
     {:reply, {:ok, payload}, socket}
   end
 
-  def handle_in("new_msg", payload, socket) do 
-    broadcast socket, "new_msg", payload
+  def handle_in("new_msg", %{"username"=> username, "tite" => title, "body" => body}, socket) do 
+    broadcast socket, "new_msg", %{username: username, title: title, body: body}
     {:noreply, socket}
   end 
 
   def handle_out("new_msg", payload, socket) do
-   push socket, "new_msg", payload
-   {:noreply, socket}
+    push socket, "new_msg", payload
+    {:noreply, socket}
   end
 
   # It is also common to receive messages from the client and

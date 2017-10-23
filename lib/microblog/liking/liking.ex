@@ -54,7 +54,7 @@ defmodule Microblog.Liking do
   """
   def get_like!(id) do 
     Repo.get!(Like, id) 
-      |> Microblog.Repo.preload(:user) 
+      |> Microblog.Repo.preload([:user, :post]) 
   end
 
   @doc """
@@ -71,6 +71,7 @@ defmodule Microblog.Liking do
   """
   def create_like(attrs \\ %{}) do
     %Like{}
+    |> Microblog.Repo.preload([:user, :post])
     |> Like.changeset(attrs)
     |> Repo.insert()
   end
@@ -89,6 +90,7 @@ defmodule Microblog.Liking do
   """
   def update_like(%Like{} = like, attrs) do
     like
+    |> Microblog.Repo.preload([:user, :post])
     |> Like.changeset(attrs)
     |> Repo.update()
   end
@@ -107,6 +109,7 @@ defmodule Microblog.Liking do
   """
   def delete_like(%Like{} = like) do
     Repo.delete(like)
+    |> Microblog.Repo.preload([:user, :post])
   end
 
   @doc """
@@ -120,5 +123,6 @@ defmodule Microblog.Liking do
   """
   def change_like(%Like{} = like) do
     Like.changeset(like, %{})
+    |> Microblog.Repo.preload([:user, :post])
   end
 end

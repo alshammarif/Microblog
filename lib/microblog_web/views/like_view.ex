@@ -13,7 +13,6 @@ defmodule MicroblogWeb.LikeView do
   def render("like.json", %{like: like}) do
     data = %{
       id: like.id,
-      total: like.total,
       post_id: like.post_id,
       user_id: like.user_id,
     }

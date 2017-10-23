@@ -1,62 +1,64 @@
 <br />
 <br />
-
-<%= if @current_user == nil do %>
-
-<div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
-  <div class="col-md-12">
-    <h1>Welcome to Mime: a microblog application!</h1>
-    <h3>To be a part of the community please Sign up or Login</h3>
-  </div>
-</div>
-
-<% end %>
-
 <%= if @current_user !== nil do %>
 <div class="container-fluid" style="margin-left: 10%; margin-top: 3%;">
   <div class="col-md-12">
   <br />
   <div class = "row">
     <div id="np" class="col-md-9">
-	<%= render "form.html", Map.put(assigns, :action, post_path(@conn, :create)) %>
+	<%= render "form2.html", Map.put(assigns, :action, post_path(@conn, :create)) %>
     </div>
   </div>
+  <br />
+  <br />
   <div id="posts" class="col-md-9">
       <%= for post <- @posts do %>
         <div class="row">
         <br />
         <div class="card border-secondary mb-3" style="margin: 0 auto; width: 40rem;">
            <div class="card-header">
-             <%= if @current_user.id == post.user_id do %>
 	       <div class="col-md-12" style="margin: 0;">
 		  <%= post.user.username %>
+		  <%= if @current_user.id == post.user_id do %>
 		  <div class="btns">               
 		    <span style="margin-left: 40%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
                     <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>   
-		  </div> 	    
+		  </div> 
+                  <% else %> 
+		  <div>
+		  <div id="likes" data-path="<%= like_path(@conn, :index) %>" 
+			data-post_id="<%= post.id %>"> 
+		      &nbsp;
+		  </div> 
+		  <button id="like-button" class="btn btn-danger btn-xs" 
+			data-user_id="<%= @current_user.id %>">Like</button>
+		  </div>
+		  <% end %>	    
 	       </div>
-	      <% else %>
-              <div class="col-md-12" style ="margin: 0;">
-		  <%= post.user.username %>
-                  <div class="btns">
-		    <button id="like-button" class= "btn btn-primary btn-xs" style="margin-left:50%;">like</button>
-                    <span id="post-likes"
-			data-post_id="<%= post.id %>"
-			data-user_id="<%= @current_user.id %>">
-		      &nbsp;	
-		    </span>
-		  </div>              
-		</div>
-	    <% end %>
            </div>
            <div class="card-body">
              <h4 class="card-title"><%= post.title %></h4>
              <p class="card-text"><%= post.body %></p>
            </div>
          </div>
-       </div>  
+       </div>
     <% end %>
   </div>
  </div>
 </div>
+
+<script id="likes-template" type="text/x-handlebars-template">
+{ {#each data}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  <button> type="button" class="close" data-dismiss="alert" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+  <strong>Thanks!</strong>{{user_username}} have liked this post
+</div>
+{{else}}
+<p>be the first!</p>
+{ {/each}}
+</script>
+
+
 <% end %>

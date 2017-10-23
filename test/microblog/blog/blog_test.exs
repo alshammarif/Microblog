@@ -6,9 +6,9 @@ defmodule Microblog.BlogTest do
   describe "posts" do
     alias Microblog.Blog.Post
 
-    @valid_attrs %{body: "some body", title: "some title", username: "some username"}
-    @update_attrs %{body: "some updated body", title: "some updated title", username: "some updated username"}
-    @invalid_attrs %{body: nil, title: nil, username: nil}
+    @valid_attrs %{body: "some body", title: "some title", user_id: 1}
+    @update_attrs %{body: "some updated body", title: "some updated title"}
+    @invalid_attrs %{body: "", title: "", user_id: nil}
 
     def post_fixture(attrs \\ %{}) do
       {:ok, post} =
@@ -33,7 +33,7 @@ defmodule Microblog.BlogTest do
       assert {:ok, %Post{} = post} = Blog.create_post(@valid_attrs)
       assert post.body == "some body"
       assert post.title == "some title"
-      assert post.username == "some username"
+      assert post.user_id == 1
     end
 
     test "create_post/1 with invalid data returns error changeset" do
@@ -46,7 +46,6 @@ defmodule Microblog.BlogTest do
       assert %Post{} = post
       assert post.body == "some updated body"
       assert post.title == "some updated title"
-      assert post.username == "some updated username"
     end
 
     test "update_post/2 with invalid data returns error changeset" do
