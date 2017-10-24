@@ -16,6 +16,5 @@ defmodule Microblog.Liking.Like do
     like
     |> cast(attrs, [:post_id, :user_id])
     |> validate_required([:post_id])
-    |> assoc_constraint([:post_id, :user_id])
   end
 end

@@ -26782,7 +26782,7 @@ $(function () {
   var po_id = pc.data("post_id");
 
   var bb = $($("#like-button")[0]);
-  var u_id = bb.data("user_id");
+  var u_id = bb.data("user-id");
 
   function fetch_likes() {
     function got_likes(data) {
@@ -26796,7 +26796,7 @@ $(function () {
       data: { post_id: po_id },
       contentType: "application/json",
       dataType: "json",
-      method: "POST",
+      method: "GET",
       success: got_likes
 
     });

@@ -22,16 +22,11 @@
 		  <%= if @current_user.id == post.user_id do %>
 		  <div class="btns">               
 		    <span style="margin-left: 40%;"><%= link "Edit", to: post_path(@conn, :edit, post), class: "btn btn-primary btn-xs" %></span>
-                    <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>   
+        <span><%= link "Delete", to: post_path(@conn, :delete, post), method: :delete, data: [confirm: "Are you sure?"], class: "btn btn-danger btn-xs" %></span>   
 		  </div> 
-                  <% else %> 
+        <% else %> 
 		  <div>
-		  <div id="likes" data-path="<%= like_path(@conn, :index) %>" 
-			data-post_id="<%= post.id %>"> 
-		      &nbsp;
-		  </div> 
-		  <button id="like-button" class="btn btn-danger btn-xs" 
-			data-user_id="<%= @current_user.id %>">Like</button>
+		  <span style="left-margin: 40%;"><%= link "View to like", to: post_path(@conn, :show, post), class: "btn btn-warning btn-xs"%></span>
 		  </div>
 		  <% end %>	    
 	       </div>
@@ -46,19 +41,4 @@
   </div>
  </div>
 </div>
-
-<script id="likes-template" type="text/x-handlebars-template">
-{ {#each data}}
-<div class="alert alert-success alert-dismissible fade show" role="alert">
-  <button> type="button" class="close" data-dismiss="alert" aria-label="Close">
-    <span aria-hidden="true">&times;</span>
-  </button>
-  <strong>Thanks!</strong>{{user_username}} have liked this post
-</div>
-{{else}}
-<p>be the first!</p>
-{ {/each}}
-</script>
-
-
 <% end %>

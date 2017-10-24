@@ -7,14 +7,39 @@
       <div class="card border-secondary mb-3">
         <div class="card-header">
           <div class="col-md-6" style="margin: 0;"> <%= @post.user.username %>
-             <span style="margin-left: 50%"><%= link "Edit", to: post_path(@conn, :edit, @post), class: "btn btn-primary btn-xs"%></span> 
-          </div>
+            <%= if @current_user.id == @post.user_id do %>
+            <div>
+                <span style="margin-left: 50%"><%= link "Edit", to: post_path(@conn, :edit, @post), class: "btn btn-primary btn-xs"%></span>
+             </div>
+             <% else %>
+             <%= if Microblog.Liking.check_user(@current_user.id, @post.id) == nil do %>
+            <div>
+              <button id="like-button" class="btn btn-danger btn-xs" 
+                  data-user-id="<%= @current_user.id %>">Like</button>
+            </div>
+            <% end %>
+           <% end %>
+           </div>
         </div>
         <div class="card-body">
           <h4 class="card-title"><%= @post.title %></h4>
           <p class="card-text"><%= @post.body%></p>
         </div>
-      </div>
+          <ul class="list-group list-group-flush" id="likes" data-path="<%= like_path(@conn, :index) %>" 
+                            data-post_id="<%= @post.id %>"> 
+              &nbsp;
+          </ul> 
+
+          <script id="likes-template" type="text/x-handlebars-template">
+                 <ul class="list-group list-group-flush">
+
+                {{#each data}}
+                 <li class="list-group-item">{{user_username}} liked this!</li>
+                {{else}}
+                  <li class="list-group-item">be the first!</li>
+                {{/each}}
+                </ul>
+          </script>
     </div>
     </div>
 </div>

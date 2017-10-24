@@ -14,7 +14,6 @@ defmodule MicroblogWeb.LikeView do
     data = %{
       id: like.id,
       post_id: like.post_id,
-      user_id: like.user_id,
     }
 
     if Ecto.assoc_loaded?(like.user) do 

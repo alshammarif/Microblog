@@ -54,7 +54,7 @@ $(function() {
   let po_id = pc.data("post_id");
   
   let bb = $($("#like-button")[0]);
-  let u_id = bb.data("user_id");
+  let u_id = bb.data("user-id");
 
   function fetch_likes() {
    function got_likes(data) {
@@ -68,7 +68,7 @@ $(function() {
 	data: {post_id: po_id},
 	contentType: "application/json",
 	dataType: "json",
-	method: "POST",
+	method: "GET",
 	success: got_likes,
 
    });
