@@ -6,7 +6,7 @@ defmodule Microblog.BlogTest do
   describe "posts" do
     alias Microblog.Blog.Post
 
-    @valid_attrs %{body: "some body", title: "some title", user_id: 1}
+    @valid_attrs %{body: "some body", title: "some title"}
     @update_attrs %{body: "some updated body", title: "some updated title"}
     @invalid_attrs %{body: "", title: "", user_id: nil}
 
@@ -33,7 +33,6 @@ defmodule Microblog.BlogTest do
       assert {:ok, %Post{} = post} = Blog.create_post(@valid_attrs)
       assert post.body == "some body"
       assert post.title == "some title"
-      assert post.user_id == 1
     end
 
     test "create_post/1 with invalid data returns error changeset" do

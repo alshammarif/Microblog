@@ -6,9 +6,9 @@ defmodule Microblog.AccountsTest do
   describe "users" do
     alias Microblog.Accounts.User
 
-    @valid_attrs %{email: "some email", username: "some username", password: "some password", is_admin?: false}
-    @update_attrs %{email: "some updated email", username: "some updated username", password: "some updated password"}
-    @invalid_attrs %{email: "", username: "", password: "", is_admin?: nil}
+    @valid_attrs %{email: "some email", username: "some username", password: "some password", password_confirmation: "some password", is_admin?: false, pw_tries: 0}
+    @update_attrs %{email: "some updated email", username: "some updated username", password: "some updated password", password_confirmation: "some updated password", is_admin?: false, pw_tries: 0}
+    @invalid_attrs %{email: "", username: "", password: "", password_confirmation: "", is_admin?: nil, pw_tries: nil}
 
     def user_fixture(attrs \\ %{}) do
       {:ok, user} =
@@ -33,8 +33,8 @@ defmodule Microblog.AccountsTest do
       assert {:ok, %User{} = user} = Accounts.create_user(@valid_attrs)
       assert user.email == "some email"
       assert user.username == "some username"
-      assert user.password == "some password"
       assert user.is_admin? == false
+
     end
 
     test "create_user/1 with invalid data returns error changeset" do
@@ -47,7 +47,6 @@ defmodule Microblog.AccountsTest do
       assert %User{} = user
       assert user.email == "some updated email"
       assert user.username == "some updated username"
-      assert user.password == "some updated password"
     end
 
     test "update_user/2 with invalid data returns error changeset" do

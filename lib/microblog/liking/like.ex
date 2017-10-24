@@ -5,8 +5,8 @@ defmodule Microblog.Liking.Like do
 
 
   schema "likes" do
-    belongs_to :post_id, Microblog.Blog.Post
-    has_many :user_id, Microblog.Accounts.User
+    belongs_to :post, Microblog.Blog.Post
+    belongs_to :user, Microblog.Accounts.User
 
     timestamps()
   end
